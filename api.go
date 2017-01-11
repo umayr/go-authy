@@ -109,6 +109,20 @@ func (authy *Authy) VerifyToken(userID string, token string, params url.Values) 
 	return tokenVerification, err
 }
 
+// AppDetails returns application details
+func (authy *Authy) AppDetails(params url.Values) (*AppDetails, error) {
+	Logger.Println("Requesting application details")
+	path := "/protected/json/app/details"
+
+	response, err := authy.DoRequest("GET", path, params)
+	if err != nil {
+		return nil, err
+	}
+
+	appDetails, err := NewAppDetails(response)
+	return appDetails, err
+}
+
 // RequestSMS requests a SMS for the given userID
 func (authy *Authy) RequestSMS(userID string, params url.Values) (*SMSRequest, error) {
 	path := "/protected/json/sms/" + url.QueryEscape(userID)

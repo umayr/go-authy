@@ -7,6 +7,20 @@ import (
 	"strconv"
 )
 
+// UserActivityType is activity type that needs to be sent to API
+type UserActivityType string
+
+const (
+	// PasswordReset is a user activity type that wraps `password_reset`
+	PasswordReset UserActivityType = "password_reset"
+	// Banned is a user activity type that wraps `banned`
+	Banned UserActivityType = "banned"
+	// Unbanned is a user activity type that wraps `unbanned`
+	Unbanned UserActivityType = "unbanned"
+	// CookieLogin is a user activity type that wraps `cookie_login`
+	CookieLogin UserActivityType = "cookie_login"
+)
+
 // User is an Authy User
 type User struct {
 	HTTPResponse *http.Response
@@ -32,6 +46,13 @@ type UserStatus struct {
 	} `json:"status"`
 	Message string `json:"message"`
 	Success bool   `json:"success"`
+}
+
+// UserActivity is a user's activity with message from Authy API
+type UserActivity struct {
+	HTTPResponse *http.Response
+	Message      string `json:"message"`
+	Success      bool   `json:"success"`
 }
 
 // NewUser returns an instance of User
@@ -76,6 +97,27 @@ func NewUserStatus(httpResponse *http.Response) (*UserStatus, error) {
 
 	statusResponse.ID = strconv.Itoa(statusResponse.StatusData.ID)
 	return statusResponse, nil
+}
+
+// NewUserActivity returns an instance of UserActivity
+func NewUserActivity(httpResponse *http.Response) (*UserActivity, error) {
+	userActivityResponse := &UserActivity{HTTPResponse: httpResponse}
+
+	defer httpResponse.Body.Close()
+	body, err := ioutil.ReadAll(httpResponse.Body)
+
+	if err != nil {
+		Logger.Println("Error reading from API:", err)
+		return userActivityResponse, err
+	}
+
+	err = json.Unmarshal(body, userActivityResponse)
+	if err != nil {
+		Logger.Println("Error parsing JSON:", err)
+		return userActivityResponse, err
+	}
+
+	return userActivityResponse, nil
 }
 
 // Valid returns true if the user was created successfully

@@ -81,3 +81,30 @@ func Test_UserStatus(t *testing.T) {
 		t.Error("Request failed: ", userStatus.Message)
 	}
 }
+
+func Test_RegisterUserActivity(t *testing.T) {
+	api := NewSandboxAuthyAPI("bf12974d70818a08199d17d5e2bae630")
+	userResponse, err := api.RegisterUser("foo@example.com", 1, "432-123-1111", url.Values{})
+	if err != nil {
+		t.Log("Comm error found:", err)
+	}
+
+	if !userResponse.Valid() {
+		t.Error("User should be valid.")
+	}
+
+	t.Log("Errors:", userResponse.Errors)
+
+	if userResponse.ID == "" {
+		t.Error("User id should be set.")
+	}
+
+	activityResponse, err := api.RegisterUserActivity(userResponse.ID, PasswordReset, url.Values{})
+	if err != nil {
+		t.Error("Internal error")
+	}
+
+	if !activityResponse.Success {
+		t.Error("Activity should be created")
+	}
+}

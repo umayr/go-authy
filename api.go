@@ -109,6 +109,21 @@ func (authy *Authy) VerifyToken(userID string, token string, params url.Values) 
 	return tokenVerification, err
 }
 
+// RegisterUserActivity register a new user activity given a user activity type.
+func (authy *Authy) RegisterUserActivity(userID string, activityType UserActivityType, params url.Values) (*UserActivity, error) {
+	Logger.Println("Registering Authy user activity with id", userID, "and activity type", activityType)
+
+	path := fmt.Sprintf(`/protected/json/users/%s/register_activity`, url.QueryEscape(userID))
+	params.Set("type", string(activityType))
+
+	response, err := authy.DoRequest("POST", path, params)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewUserActivity(response)
+}
+
 // AppDetails returns application details
 func (authy *Authy) AppDetails(params url.Values) (*AppDetails, error) {
 	Logger.Println("Requesting application details")

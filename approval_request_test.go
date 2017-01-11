@@ -7,9 +7,9 @@ import (
 )
 
 func Test_SendApprovalRequest(t *testing.T) {
-	api := NewSandboxAuthyAPI("bf12974d70818a08199d17d5e2bae630")
+	api := NewAuthyAPI(data.ApiKey)
 
-	user, err := api.RegisterUser("foo@example.com", 1, "432-123-1111", url.Values{})
+	user, err := api.RegisterUser(data.Email, data.CountryCode, data.PhoneNumber, url.Values{})
 	approvalRequest, err := api.SendApprovalRequest(user.ID, "please approve this", Details{"data1": "value1"}, url.Values{})
 
 	if err != nil {
@@ -22,9 +22,9 @@ func Test_SendApprovalRequest(t *testing.T) {
 }
 
 func Test_FindApprovalRequest(t *testing.T) {
-	api := NewSandboxAuthyAPI("bf12974d70818a08199d17d5e2bae630")
+	api := NewAuthyAPI(data.ApiKey)
 
-	user, err := api.RegisterUser("foo@example.com", 1, "432-123-1111", url.Values{})
+	user, err := api.RegisterUser(data.Email, data.CountryCode, data.PhoneNumber, url.Values{})
 	approvalRequest, err := api.SendApprovalRequest(user.ID, "please approve this", Details{"data1": "value1"}, url.Values{})
 
 	if err != nil {
@@ -52,9 +52,9 @@ func Test_FindApprovalRequest(t *testing.T) {
 }
 
 func Test_WaitForApprovalRequest(t *testing.T) {
-	api := NewSandboxAuthyAPI("bf12974d70818a08199d17d5e2bae630")
+	api := NewAuthyAPI(data.ApiKey)
 
-	user, err := api.RegisterUser("foo@example.com", 1, "432-123-1111", url.Values{})
+	user, err := api.RegisterUser(data.Email, data.CountryCode, data.PhoneNumber, url.Values{})
 	approvalRequest, err := api.SendApprovalRequest(user.ID, "please approve this", Details{"data1": "value1"}, url.Values{})
 
 	if err != nil {

@@ -1,8 +1,8 @@
 package authy
 
 import (
-	"testing"
 	"net/url"
+	"testing"
 )
 
 func TestAppDetails(t *testing.T) {

@@ -18,7 +18,7 @@ func Test_VerifyTokenWithUnregisteredUser(t *testing.T) {
 		t.Error("Verification should not be valid.")
 	}
 
-	if verification.Message != "User doesn't exist." {
+	if verification.Message != "User doesn't exist" {
 		t.Error("Invalid test using a registered user.")
 	}
 }

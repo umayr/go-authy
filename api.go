@@ -248,6 +248,21 @@ func (authy *Authy) CheckPhoneVerification(countryCode int, phoneNumber string, 
 	return NewPhoneVerificationCheck(response)
 }
 
+// PhoneInformation fetches phone information.
+func (authy *Authy) PhoneInformation(countryCode int, phoneNumber string, params url.Values) (*PhoneIntelligence, error) {
+	params.Set("country_code", strconv.Itoa(countryCode))
+	params.Set("phone_number", phoneNumber)
+
+	path := fmt.Sprintf("/protected/json/phones/info")
+	response, err := authy.DoRequest("GET", path, params)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+	return NewPhoneIntelligence(response)
+}
+
 // DoRequest performs a HTTP request to the Authy API
 func (authy *Authy) DoRequest(method string, path string, params url.Values) (*http.Response, error) {
 	apiURL := authy.buildURL(path)

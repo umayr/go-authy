@@ -1,1 +1,4 @@
 *.swp
+test_data.json
+.idea
+coverage.out

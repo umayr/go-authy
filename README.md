@@ -176,8 +176,18 @@ and start coding.
 
 ### Tests
 
-To run the test just type:
+Since Authy's sandbox environment doesn't support onetouch, so in order to run tests you need to create a file `test_data.json` with valid API key and details of an authenticated user.
 
+Example:
+```json
+{
+    "apiKey": "[API key]",
+    "email": "hello@foobar.com",
+    "phoneNumber": "5551234444",
+    "countryCode": 1
+}
+```
+Then, execute tests with:
 ```shell
 make test
 ```

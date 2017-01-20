@@ -263,6 +263,11 @@ func (authy *Authy) PhoneInformation(countryCode int, phoneNumber string, params
 	return NewPhoneIntelligence(response)
 }
 
+// VerifySignature return true if onetouch callback URL signature is valid
+func (authy *Authy) VerifySignature(signature string, url string, method string, params url.Values, nonce string) bool {
+	return verifySignature(signature, authy.APIKey, url, method, params, nonce)
+}
+
 // DoRequest performs a HTTP request to the Authy API
 func (authy *Authy) DoRequest(method string, path string, params url.Values) (*http.Response, error) {
 	apiURL := authy.buildURL(path)
